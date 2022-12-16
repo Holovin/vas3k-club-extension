@@ -23,20 +23,22 @@ export class PageFactory {
      * @returns {Page}
      */
     create() {
-
         if (this.isUserPageType()) {
             if (getUser() === this.getWhoAmI()) {
                 return new OwnUserPage(this.pathname);
             }
-            return new UserPage(this.pathname)
+
+            return new UserPage(this.pathname);
         }
 
         if (this.isUserContentPageType()) {
-            return new PostPage(this.pathname)
+            return new PostPage(this.pathname);
         }
+
         if (this.isFeedPage()) {
-            return new FeedPage(this.pathname)
+            return new FeedPage(this.pathname);
         }
+
         return new Page(this.pathname)
     }
 

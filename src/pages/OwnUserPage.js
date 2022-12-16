@@ -13,8 +13,7 @@ export class OwnUserPage extends Page {
 
     createAssholesListEdit() {
         const widget = document.createElement("div")
-        widget.setAttribute("class", "block")
-        const header = "<h2 class='profile-header'>Мои мудаки</h2>"
+        const header = "<h2 class='doc'>Мои мудаки</h2>";
         const textArea = document.createElement("textarea")
         textArea.style.width = "100%"
         textArea.value = AssholesStorage.getAssholesText()
@@ -26,8 +25,7 @@ export class OwnUserPage extends Page {
 
     createBlacklistEdit() {
         const widget = document.createElement("div")
-        widget.setAttribute("class", "block")
-        const header = "<h2 class='profile-header'>Черный список страниц</h2>"
+        const header = "<h2 class='doc'>Черный список страниц</h2>";
         const textArea = document.createElement("textarea")
         textArea.style.width = "100%"
         textArea.value = BlacklistStorage.getBlacklistText()
@@ -38,9 +36,12 @@ export class OwnUserPage extends Page {
     }
 
     addAssholesList() {
-        const profileInfo = document.querySelector('.profile-intro')
-        profileInfo.appendChild( this.createAssholesListEdit())
-        profileInfo.appendChild( this.createBlacklistEdit())
-    }
+        const block = document.createElement("div");
+        block.classList.add('block');
+        block.appendChild(this.createAssholesListEdit());
+        block.appendChild(this.createBlacklistEdit());
 
+        const parent = document.querySelector(".profile-statuses");
+        parent.parentNode.insertBefore(block, parent.nextSibling);
+    }
 }

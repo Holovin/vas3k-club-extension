@@ -17,18 +17,25 @@ export class PostPage extends Page {
 
     hideAssholeComments() {
         for (const asshole of AssholesStorage.getAssholes()) {
-            const selector = `.comment-header-author-name[href="/user/${asshole}/"]`
-            const nodesWithAsshole = document.querySelectorAll(selector)
-            for (const assholeNode of nodesWithAsshole) {
-                assholeNode
-                    .parentElement
-                    .parentElement
-                    .parentElement
-                    .parentElement
-                    .remove()
+            const selectorName = `.comment-header-author-name[href="/user/${asshole}/"]`;
+            const nodesName = document.querySelectorAll(selectorName);
+            for (const node of nodesName) {
+                node.innerHTML += '⚠️';
+                node.style.color = '#8e4c17';
+            }
+
+            const selectorImgSide = `.comment-side-avatar[href="/user/${asshole}/"]`;
+            const selectorImg = `.reply-avatar[href="/user/${asshole}/"]`;
+            const nodesImg = [
+                ...document.querySelectorAll(selectorImgSide),
+                ...document.querySelectorAll(selectorImg),
+            ];
+            for (const node of nodesImg) {
+                node.style.border = '4px solid #8e4c17';
             }
         }
     }
+
     movePostCommentForm() {
         const postCommentForm = document.querySelector('#post-comments-form')
         const commentsList = document.querySelector('.post-comments-list')
@@ -112,8 +119,9 @@ export class PostPage extends Page {
 
     createButton() {
         const button = document.createElement("i")
-        button.setAttribute("class", "fas fa-cloud-download-alt")
+        button.setAttribute("class", "fas fa-cloud-download-alt");
         button.style.cursor = 'pointer';
+        button.style.opacity = '0'; // TODO
         return button;
     }
 

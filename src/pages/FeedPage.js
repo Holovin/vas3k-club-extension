@@ -9,10 +9,9 @@ export class FeedPage extends Page {
 
     modifyContent() {
         this.hideBlacklistedPosts()
-        this.hideAssholePosts()
+        this.modifyAssholePosts()
         // hideVotesRatingsAvatars()
-        this.addBlacklistButton()
-
+        // this.addBlacklistButton()
     }
 
     addBlacklistButton() {
@@ -35,13 +34,10 @@ export class FeedPage extends Page {
         })
     }
 
-    hideAssholePosts() {
+    modifyAssholePosts() {
         for (const asshole of AssholesStorage.getAssholes()) {
-            for (const assholeHref of document.querySelectorAll(`[href="/user/${asshole}/"]`)) {
-                assholeHref
-                    .parentElement
-                    .parentElement
-                    .remove()
+            for (const node of document.querySelectorAll(`[href="/user/${asshole}/"]`)) {
+                node.style.border = '4px solid #8e4c17';
             }
         }
     }

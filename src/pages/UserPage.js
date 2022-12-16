@@ -9,36 +9,63 @@ export class UserPage extends Page {
     }
 
     modifyContent() {
-        this.addAssholeButton()
-        this.addPrivateCommentWidget()
+        const block = document.createElement("div");
+        block.classList.add('block');
+        block.appendChild(this.createPrivateCommentWidget());
+        block.appendChild(this.createAssholeButton());
+
+        const parent = document.querySelector(".profile-statuses");
+        parent.parentNode.insertBefore(block, parent.nextSibling);
     }
 
-    addPrivateCommentWidget() {
-        const widget = document.createElement("div")
-        widget.setAttribute("class", "block")
-        const header = "<h2 class='profile-header'>Приватные комментарии</h2>"
-        const textarea = document.createElement("textarea")
-        textarea.value = PrivateCommentsStorage.getComment(this.user || "")
-        textarea.addEventListener("input", (text) => {
+    createPrivateCommentWidget() {
+        const widget = document.createElement('div');
+        widget.style.overflow = 'hidden';
+        widget.style.display = 'flex';
+        widget.style.flexDirection = 'column';
+        widget.style.alignItems = 'center';
+
+        const header = document.createElement('h4');
+        header.classList.add('doc');
+        header.style.marginBlockStart = '0';
+        header.innerHTML = 'Заметка';
+
+        const textarea = document.createElement('textarea');
+        textarea.rows = 3;
+        textarea.style.width = '90%';
+        textarea.style.marginBlockEnd = '2em';
+
+        textarea.value = PrivateCommentsStorage.getComment(this.user || '');
+        textarea.addEventListener('input', (text) => {
             const comment = text.target.value
             PrivateCommentsStorage.setComment(this.user, comment)
         })
-        widget.innerHTML = header
-        widget.appendChild(textarea)
-        document.querySelector(".profile-statuses").appendChild(widget)
+
+        widget.appendChild(header);
+        widget.appendChild(textarea);
+
+        return widget;
     }
 
-    addAssholeButton() {
-        const parser = new DOMParser();
-        const assholeBtnStr = `<a class="profile-status clickable"><span class="profile-status-icon">🖕</span> <span class="profile-status-status">Добавить в мои мудаки</span></a>`
-        const assholeBtn = parser.parseFromString(assholeBtnStr, 'text/html').querySelector("a");
-        assholeBtn.addEventListener("click", () => {
-            AssholesStorage.addAsshole(this.getUser())
+    createAssholeButton() {
+        const isAdded = AssholesStorage.checkAsshole(this.getUser());
+        const buttonLabel = !isAdded ? 'Добавить в мои мудаки' : 'Удалить из моих мудаков'
+
+        const button = document.createElement("a");
+        button.classList.add('user-tag');
+        button.style.display = 'block';
+        button.innerHTML = `🖕${buttonLabel}`;
+        button.addEventListener("click", () => {
+            if (!isAdded) {
+                if (AssholesStorage.addAsshole(this.getUser())) {
+                    alert('Добавлен!');
+                }
+            }
+
+            // TODO
         })
-        document.querySelector(".profile-statuses").appendChild(assholeBtn)
-        if (this.isUserAsshole(this.getUser())) {
-            console.log("the user is an asshole!")
-        }
+
+        return button;
     }
 
     /**

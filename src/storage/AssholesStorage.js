@@ -17,6 +17,10 @@ export class AssholesStorage {
         return AssholesStorage.getAssholesText().split(',') || [];
     }
 
+    static checkAsshole(username) {
+        return AssholesStorage.getAssholes().find(i => i === username);
+    }
+
     /**
      *
      * @param {string} assholesText
@@ -32,9 +36,12 @@ export class AssholesStorage {
     static addAsshole(asshole) {
         const assholes = this.getAssholes();
         if (assholes.includes(asshole)) {
-            return;
+            return false;
         }
+
         assholes.push(asshole);
         localStorage.setItem(ASSHOLES_STORAGE_KEY, assholes.join(','));
+
+        return true;
     }
 }
